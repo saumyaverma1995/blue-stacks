@@ -1,0 +1,14 @@
+.wrapperDiv {
+  .tabs {
+    font-size: 11px;
+    width: 35%;
+    display: flex;
+    font-weight: 600;
+    justify-content: space-between;
+    color: #83A515;;
+    span {
+      border-bottom: 2px solid #83A515;
+      padding: 5px 8px;
+    }
+  }
+}

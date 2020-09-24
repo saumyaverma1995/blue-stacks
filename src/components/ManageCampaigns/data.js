@@ -1,7 +1,8 @@
 import sample from "../../assets/sample.png";
 import Bitmap from "../../assets/Bitmap.png";
-export const data = [
+const data = [
   {
+    id: 1,
     name: "Test Whatsapp",
     region: "US",
     createdOn: 1559807714999,
@@ -11,6 +12,7 @@ export const data = [
     image_url: Bitmap,
   },
   {
+    id: 2,
     name: "Super Jewels Quest",
     region: "CA, FR",
     createdOn: 1559806715124,
@@ -20,6 +22,7 @@ export const data = [
     image_url: Bitmap,
   },
   {
+    id: 3,
     name: "Mole Slayer",
     region: "FR",
     createdOn: 1559806711124,
@@ -29,6 +32,7 @@ export const data = [
     image_url: Bitmap,
   },
   {
+    id: 4,
     name: "Mancala Mix 1",
     region: "JP",
     createdOn: 1600046719886,
@@ -38,6 +42,7 @@ export const data = [
     image_url: sample,
   },
   {
+    id: 5,
     name: "Test Whatsapp",
     region: "US",
     createdOn: 1600942760201,
@@ -47,6 +52,7 @@ export const data = [
     image_url: sample,
   },
   {
+    id: 6,
     name: "Super Jewels Quest",
     region: "CA, FR",
     createdOn: 1600942760201,
@@ -56,6 +62,7 @@ export const data = [
     image_url: sample,
   },
   {
+    id: 7,
     name: "Mole Slayer",
     region: "FR",
     createdOn: 1600942760201,
@@ -65,6 +72,7 @@ export const data = [
     image_url: Bitmap,
   },
   {
+    id: 8,
     name: "Mancala Mix",
     region: "JP",
     createdOn: 1600942760201,
@@ -74,6 +82,7 @@ export const data = [
     image_url: Bitmap,
   },
   {
+    id: 8,
     name: "Mancala Mix 1",
     region: "JP",
     createdOn: 1600942760201,
@@ -83,6 +92,7 @@ export const data = [
     image_url: Bitmap,
   },
   {
+    id: 9,
     name: "Mancala Mix 2",
     region: "JP",
     createdOn: 1600942760201,
@@ -92,6 +102,7 @@ export const data = [
     image_url: Bitmap,
   },
   {
+    id: 10,
     name: "Test Whatsapp",
     region: "US",
     createdOn: 1601940540697,
@@ -101,6 +112,7 @@ export const data = [
     image_url: Bitmap,
   },
   {
+    id: 11,
     name: "Super Jewels Quest",
     region: "CA, FR",
     createdOn: 1601940540696,
@@ -110,6 +122,7 @@ export const data = [
     image_url: Bitmap,
   },
   {
+    id: 12,
     name: "Mole Slayer",
     region: "FR",
     createdOn: 1601940540695,
@@ -119,6 +132,7 @@ export const data = [
     image_url: Bitmap,
   },
   {
+    id: 13,
     name: "Mancala Mix",
     region: "JP",
     createdOn: 1601940540634,
@@ -128,6 +142,7 @@ export const data = [
     image_url: Bitmap,
   },
   {
+    id: 14,
     name: "Mancala Mix 3",
     region: "JP",
     createdOn: 1601990570633,
@@ -137,3 +152,4 @@ export const data = [
     image_url: Bitmap,
   },
 ];
+export default data;

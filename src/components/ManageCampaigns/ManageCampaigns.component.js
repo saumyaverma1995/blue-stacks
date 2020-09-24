@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import style from "./ManageCampaigns.module.scss";
 import Table from "../Table/Table.component.js";
-import { data } from "./data.js";
+import data from "./data.js";
 import { setEventTypes } from "../../reducer/events/events.actions";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import isEqual from "lodash/isEqual";
 
 const mapStateToProps = (store) => {
-  const events = store.events;
+  const events = store.eventsReducer.data;
   return {
     events,
   };
@@ -25,19 +26,21 @@ class ManageCampaigns extends Component {
     selectedTab: 0,
     selectedTabData: [],
     tabs: [
-      { key: 0, value: "Upcoming Campaigns", data: [] },
-      { key: 1, value: "Live Campaigns", data: [] },
-      { key: 2, value: "Past Campaigns", data: [] },
-    ], 
+      { key: 0, value: "Upcoming Campaigns" },
+      { key: 1, value: "Live Campaigns" },
+      { key: 2, value: "Past Campaigns" },
+    ],
   };
-  componentDidMount() {
-    this.props.setEventTypes({
-      ...data,
-    });
+  componentWillReceiveProps(nextProps) {
+    if (!isEqual(this.props.events, nextProps.events)) {
+      this.updateData(nextProps.events);
+    }
+  }
+  updateData(events) {
     let currentEvents = [],
       pastEvents = [],
       futureEvents = [];
-    data.map((ele) => {
+    events.map((ele) => {
       if (new Date().getDate() === new Date(ele.createdOn).getDate())
         currentEvents.push(ele);
       else if (new Date() > new Date(ele.createdOn)) pastEvents.push(ele);
@@ -49,6 +52,24 @@ class ManageCampaigns extends Component {
       pastEvents: [...pastEvents],
       futureEvents: [...futureEvents],
     });
+  }
+  componentDidMount() {
+    this.props.setEventTypes(data);
+    // let currentEvents = [],
+    //   pastEvents = [],
+    //   futureEvents = [];
+    // data.map((ele) => {
+    //   if (new Date().getDate() === new Date(ele.createdOn).getDate())
+    //     currentEvents.push(ele);
+    //   else if (new Date() > new Date(ele.createdOn)) pastEvents.push(ele);
+    //   else if (new Date() < new Date(ele.createdOn)) futureEvents.push(ele);
+    // });
+    // this.setState({
+    //   selectedTabData: [...futureEvents],
+    //   currentEvents: [...currentEvents],
+    //   pastEvents: [...pastEvents],
+    //   futureEvents: [...futureEvents],
+    // });
   }
   tabClickHandler = (tab) => {
     let { currentEvents, pastEvents, futureEvents } = this.state;

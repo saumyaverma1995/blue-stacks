@@ -1,14 +1,15 @@
 import { EventActionTypes } from "./events.types.js";
 const INITIAL_STATE = {
-  data: null,
+  events: [],
 };
 
 const eventsReducer = (state = INITIAL_STATE, action) => {
+  console.log(action.payload);
   switch (action.type) {
     case EventActionTypes.SET_EVENTS:
       return {
         ...state,
-        data: action.payload,
+        ...action.payload,
       };
     default:
       return state;

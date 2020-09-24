@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import style from "./Table.module.scss";
-import { Rows } from "../Rows/Rows.component.js";
+import Rows from "../Rows/Rows.component.js";
 class Table extends Component {
   render() {
     let { selectedTabData } = this.props;
@@ -13,7 +13,7 @@ class Table extends Component {
           <span className={style.action}>Action</span>
         </div>
         {selectedTabData.map((ele, index) => {
-          return <Rows key={index} data={ele} />
+          return <Rows key={index} data={ele} />;
         })}
       </div>
     );

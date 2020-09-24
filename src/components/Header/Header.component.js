@@ -4,7 +4,7 @@ import headerImg from "../../assets/header-img.png"
 export const Header = () => (
   <div className={style.header}>
     <div className={style.wrapper}>
-      <img src={headerImg}></img>
+      <img alt="" src={headerImg}></img>
     </div>
   </div>
 );

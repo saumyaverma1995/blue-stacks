@@ -26,7 +26,7 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
       setRowData,
-      setEventTypes
+      setEventTypes,
     },
     dispatch
   );
@@ -34,6 +34,7 @@ const mapDispatchToProps = (dispatch) => {
 class Rows extends Component {
   state = {
     showDatePicker: false,
+    openPopup: false,
   };
   openCalendar = () => {
     this.setState({
@@ -50,12 +51,17 @@ class Rows extends Component {
     this.setState({
       selectedDate: date,
     });
-    this.props.setEventTypes(events)
+    this.props.setEventTypes(events);
+  };
+  openPopup = () => {
+    this.setState({
+      openPopup: !this.state.openPopup,
+    });
   };
   onCloseCalendar = () => {};
   render() {
     let { data } = this.props;
-    let { showDatePicker, selectedDate } = this.state;
+    let { showDatePicker, selectedDate, openPopup } = this.state;
     return (
       <>
         <div className={style.row}>
@@ -72,7 +78,7 @@ class Rows extends Component {
               <span className={style.region}>{data.region}</span>
             </div>
           </div>
-          <div className={style.view}>
+          <div className={style.view} onClick={this.openPopup}>
             <img src={Price} alt=""></img>
             <span className={style.pricing}>View Pricing</span>
           </div>
@@ -101,6 +107,45 @@ class Rows extends Component {
             />
           </MuiPickersUtilsProvider>
         </label>
+        {openPopup ? (
+          <div className={style.modal}>
+            <div className={style.modal_content}>
+              <div className={style.topWrapperDiv}>
+                <img
+                  className={style.image}
+                  src={`${data.image_url}`}
+                  alt=""
+                ></img>
+                <div className={style.info}>
+                  <span className={style.popupName}>{data.name}</span>
+                  <span className={style.popupRegion}>{data.region}</span>
+                </div>
+              </div>
+              <div className={style.bottomWrapperDiv}>
+                <div className={style.header}>
+                  <span>Pricing</span>
+                </div>
+                <div className={style.priceDetails}>
+                  <span className={style.label}>1 Week - 1 Month</span>
+                  <span className={style.value}>$ {data.price1}</span>
+                </div>
+                <div className={style.priceDetails}>
+                  <span className={style.label}>6 Months</span>
+                  <span className={style.value}>$ {data.price2}</span>
+                </div>
+                <div className={style.priceDetails}>
+                  <span className={style.label}>1 Year</span>
+                  <span className={style.value}>$ {data.price3}</span>
+                </div>
+              </div>
+              <div className={style.buttonWrapper}>
+                <button className={style.button} onClick={this.openPopup}>
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null}
       </>
     );
   }

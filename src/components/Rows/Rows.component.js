@@ -15,6 +15,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { setRowData } from "../../reducer/rows/rows.actions";
 import { setEventTypes } from "../../reducer/events/events.actions";
+import _ from "lodash"
 
 const mapStateToProps = (store) => {
   const events = store.eventsReducer.data;
@@ -43,15 +44,14 @@ class Rows extends Component {
     });
   };
   handleDateChange = (date, id) => {
-    console.log("...........", new Date(date).getTime(), id);
     let { events } = this.props;
-    let selectedRow = events.find((ele) => ele.id === id);
+    let tempEvents = _.cloneDeep(events);
+    let selectedRow = tempEvents.find((ele) => ele.id === id);
     selectedRow.createdOn = new Date(date).getTime();
-    console.log(events);
     this.setState({
       selectedDate: date,
     });
-    this.props.setEventTypes(events);
+    this.props.setEventTypes(tempEvents);
   };
   openPopup = () => {
     this.setState({

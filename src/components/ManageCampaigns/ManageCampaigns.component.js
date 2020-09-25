@@ -31,9 +31,9 @@ class ManageCampaigns extends Component {
       { key: 2, value: "Past Campaigns" },
     ],
   };
-  componentWillReceiveProps(nextProps) {
-    if (!isEqual(this.props.events, nextProps.events)) {
-      this.updateData(nextProps.events);
+  componentDidUpdate(prevProps) {
+    if (!isEqual(this.props.events, prevProps.events)) {
+      this.updateData(this.props.events);
     }
   }
   updateData(events) {

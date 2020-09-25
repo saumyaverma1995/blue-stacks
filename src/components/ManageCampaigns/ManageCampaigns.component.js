@@ -1,30 +1,38 @@
 import React, { Component } from "react";
 import style from "./ManageCampaigns.module.scss";
 import Table from "../Table/Table.component.js";
-import data from "./data.js";
-import { setEventTypes } from "../../reducer/events/events.actions";
+import {
+  setEventTypes,
+  setTabData,
+  setTabKey,
+} from "../../reducer/events/events.actions";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import isEqual from "lodash/isEqual";
+import firebase from "../../firebase.js";
 
 const mapStateToProps = (store) => {
   const events = store.eventsReducer.data;
+  const selectedTabData = store.eventsReducer.selectedTabData;
+  const selectedTabKey = store.eventsReducer.selectedTabKey;
   return {
     events,
+    selectedTabData,
+    selectedTabKey,
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
       setEventTypes,
+      setTabData,
+      setTabKey,
     },
     dispatch
   );
 };
 class ManageCampaigns extends Component {
   state = {
-    selectedTab: 0,
-    selectedTabData: [],
     tabs: [
       { key: 0, value: "Upcoming Campaigns" },
       { key: 1, value: "Live Campaigns" },
@@ -40,64 +48,69 @@ class ManageCampaigns extends Component {
     let currentEvents = [],
       pastEvents = [],
       futureEvents = [];
+    let { setTabData, selectedTabKey } = this.props;
     events.map((ele) => {
-      if (new Date().getDate() === new Date(ele.createdOn).getDate())
+      if (
+        new Date().toLocaleDateString("default") ===
+        new Date(ele.createdOn).toLocaleDateString("default")
+      ) {
         currentEvents.push(ele);
-      else if (new Date() > new Date(ele.createdOn)) pastEvents.push(ele);
-      else if (new Date() < new Date(ele.createdOn)) futureEvents.push(ele);
+      } else if (new Date() > new Date(ele.createdOn)) {
+        pastEvents.push(ele);
+      } else if (new Date() < new Date(ele.createdOn)) {
+        futureEvents.push(ele);
+      }
     });
+    switch (selectedTabKey) {
+      case 0:
+        setTabData(futureEvents);
+        break;
+      case 1:
+        setTabData(currentEvents);
+        break;
+      case 2:
+        setTabData(pastEvents);
+        break;
+      default:
+        console.log("default");
+    }
+
     this.setState({
-      selectedTabData: [...futureEvents],
       currentEvents: [...currentEvents],
       pastEvents: [...pastEvents],
       futureEvents: [...futureEvents],
     });
   }
   componentDidMount() {
-    this.props.setEventTypes(data);
-    // let currentEvents = [],
-    //   pastEvents = [],
-    //   futureEvents = [];
-    // data.map((ele) => {
-    //   if (new Date().getDate() === new Date(ele.createdOn).getDate())
-    //     currentEvents.push(ele);
-    //   else if (new Date() > new Date(ele.createdOn)) pastEvents.push(ele);
-    //   else if (new Date() < new Date(ele.createdOn)) futureEvents.push(ele);
-    // });
-    // this.setState({
-    //   selectedTabData: [...futureEvents],
-    //   currentEvents: [...currentEvents],
-    //   pastEvents: [...pastEvents],
-    //   futureEvents: [...futureEvents],
-    // });
+    let dataRef = firebase.database().ref("data");
+    dataRef.on("value", (snapShot) => {
+      let data = snapShot.val();
+      this.props.setEventTypes(data);
+    });
   }
   tabClickHandler = (tab) => {
     let { currentEvents, pastEvents, futureEvents } = this.state;
+    let { setTabData, setTabKey } = this.props;
     switch (tab.key) {
       case 0:
-        this.setState({
-          selectedTabData: [...futureEvents],
-        });
+        setTabData(futureEvents);
+        setTabKey(0);
         break;
       case 1:
-        this.setState({
-          selectedTabData: [...currentEvents],
-        });
+        setTabKey(1);
+        setTabData(currentEvents);
         break;
       case 2:
-        this.setState({
-          selectedTabData: [...pastEvents],
-        });
+        setTabKey(2);
+        setTabData(pastEvents);
         break;
       default:
         console.log("default");
     }
-    this.setState({
-      selectedTab: tab.key,
-    });
   };
   render() {
-    let { tabs, selectedTab, selectedTabData } = this.state;
+    let { tabs } = this.state;
+    let { selectedTabKey, selectedTabData } = this.props;
     return (
       <div className={style.outerDiv}>
         <h2>Manage Campaigns</h2>
@@ -106,7 +119,7 @@ class ManageCampaigns extends Component {
             {tabs.map((tab, index) => (
               <span
                 key={index}
-                className={selectedTab === tab.key ? style.active : ""}
+                className={selectedTabKey === tab.key ? style.active : ""}
                 onClick={() => this.tabClickHandler(tab)}
               >
                 {tab.value}
@@ -114,7 +127,10 @@ class ManageCampaigns extends Component {
             ))}
           </div>
         </div>
-        <Table selectedTabData={selectedTabData} />
+        {selectedTabData &&
+          selectedTabData.length > 0 && (
+            <Table selectedTabData={selectedTabData} />
+          )}
       </div>
     );
   }
